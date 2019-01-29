@@ -5,7 +5,7 @@ The configuration was created to study the impact of environmental changes (main
 
 Edits in these routines are mainly additional outputs for equation terms affecting phytoplankton growth and limiting factors. The vertical grid was also modified to reduce the impact of a very idealised MLD seasonal cycle of the plankton response.
 
-Original and updated PISCES routines:
+Original routines PISCES v1 (2011 LOCEAN version):
 http://forge.ipsl.jussieu.fr/nemo/browser/branches/2011/dev_LOCEAN_2011/NEMOGCM/NEMO/TOP_SRC?rev=6453&order=name
 
 Collaborators: Christian Ethe, Marina Levy, Alessandro Tagliabue, Laurent Bopp, Julien LeSommer and Oliver Aumont 
