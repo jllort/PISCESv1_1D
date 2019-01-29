@@ -1,0 +1,4 @@
+
+cp /Users/jllort/NEMOGCM/CONFIG/ORCA2_OFF_PISCES_TRD_L75/BLD/bin/nemo.exe nemo.exe
+
+./nemo.exe

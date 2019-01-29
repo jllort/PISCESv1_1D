@@ -1,0 +1,26 @@
+
+\cp namelist_1st namelist
+\cp K1D_restart_AUTO_L75_D700.nc K1D_restart_temp_L75_D700.nc
+
+./job0	
+\mv K1D_L75_D700_00001460_restart_trc.nc K1D_restart_temp_L75_D700.nc
+ncks -A -v TRNPO4,TRNNO3,TRNSi,TRNFer,TRBPO4,TRBNO3,TRBSi,TRBFer K1D_restart_AUTO_L75_D700.nc K1D_restart_temp_L75_D700.nc
+
+\cp namelist_2nd namelist
+
+./job0	
+\mv K1D_L75_D700_00001460_restart_trc.nc K1D_restart_temp_L75_D700.nc
+ncks -A -v TRNPO4,TRNNO3,TRNSi,TRNFer,TRBPO4,TRBNO3,TRBSi,TRBFer K1D_restart_AUTO_L75_D700.nc K1D_restart_temp_L75_D700.nc
+
+\cp namelist_3rd namelist
+
+./job0
+
+for type in grid_T grid_W ptrc_T diad_T trdtrc; do
+	\rm outputs/K1D_L75_D700_3ys_nPRnPE_${type}.nc
+	cdo cat K1D_L75_D700_1d_00010215_00020214_${type}.nc  K1D_L75_D700_1d_00020215_00030214_${type}.nc K1D_L75_D700_1d_00030215_00040214_${type}.nc outputs/K1D_L75_D700_3ys_nPRnPE_${type}.nc 
+done
+
+\rm K1D_L75_D700_1d_000?0215_000?0214_*.nc
+\rm K1D_L75_D700_0000*_restart_trc.nc
+done
