@@ -81,7 +81,6 @@ CONTAINS
       IF( nn_timing == 1 )  CALL timing_start('p4z_lim')
       !
       write(numout,*) 
-      write(numout,*) ' Joann !!! '
       DO jk = 1, jpkm1
          DO jj = 1, jpj
             DO ji = 1, jpi
@@ -122,7 +121,7 @@ CONTAINS
                zratio   = trn(ji,jj,jk,jpnfe) * z1_trnphy 
                zironmin = xcoef1 * trn(ji,jj,jk,jpnch) * z1_trnphy + xcoef2 * zlim1 + xcoef3 * xnanono3(ji,jj,jk)
                zlim3    = MAX( 0.,( zratio - zironmin ) / qnfelim )
-!Al and Joan?
+!Al and Joan
                xlimnfe(ji,jj,jk) = MIN( 1., zlim3 )
 !end
                xlimphy(ji,jj,jk) = MIN( zlim1, zlim2, zlim3 )
