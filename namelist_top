@@ -1,0 +1,178 @@
+!!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+!! NEMO/TOP1 :  1 - tracer definition                     (namtrc    )
+!!              2 - tracer data initialisation            (namtrc_dta)
+!!              3 - tracer advection                      (namtrc_adv)
+!!              4 - tracer lateral diffusion              (namtrc_ldf)
+!!              5 - tracer vertical physics               (namtrc_zdf)
+!!              6 - tracer newtonian damping              (namtrc_dmp)
+!!              7 - dynamical tracer trends               (namtrc_trd)
+!!              8 - tracer output diagonstics             (namtrc_dia)
+!>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+!'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+&namtrc     !   tracers definition
+!,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+   nn_dttrc      =  1        !  time step frequency for passive sn_tracers      
+   nn_writetrc   =  1460      !  time step frequency for sn_tracer outputs
+   ln_rsttr      = .true.   !  start from a restart file (T) or not (F)
+   nn_rsttr      =   0       !  restart control = 0 initial time step is not compared to the restart file value
+                           !                  = 1 do not use the value in the restart file
+                           !                  = 2 calendar parameters read in the restart file
+   cn_trcrst_in  = "K1D_restart_temp_L75_D700"   !  suffix of pass. sn_tracer restart name (input)
+   cn_trcrst_out = "restart_trc"   !  suffix of pass. sn_tracer restart name (output)
+   ln_trcdta     =   .true. !  Initialisation from data input file (T) or not (F)
+!
+!              !    name   !           title of the field              !   units    ! initial data ! save   !
+!              !           !                                           !            ! from file    ! or not ! 
+!              !           !                                           !            ! or not       !        !
+   sn_tracer(1)   = 'DIC     ' , 'Dissolved inorganic Concentration      ',  'mol-C/L' ,  .true.     ,  .true.
+   sn_tracer(2)   = 'Alkalini' , 'Total Alkalinity Concentration         ',  'eq/L '   ,  .true.     ,  .true.
+   sn_tracer(3)   = 'O2      ' , 'Dissolved Oxygen Concentration         ',  'mol-C/L' ,  .true.     ,  .true.
+   sn_tracer(4)   = 'CaCO3   ' , 'Calcite Concentration                  ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(5)   = 'PO4     ' , 'Phosphate Concentration                ',  'mol-C/L' ,  .true.     ,  .true.
+   sn_tracer(6)   = 'POC     ' , 'Small organic carbon Concentration     ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(7)   = 'Si      ' , 'Silicate Concentration                 ',  'mol-C/L' ,  .true.     ,  .true.
+   sn_tracer(8)   = 'PHY     ' , 'Nanophytoplankton Concentration        ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(9)   = 'ZOO     ' , 'Microzooplankton Concentration         ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(10)  = 'DOC     ' , 'Dissolved organic Concentration        ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(11)  = 'PHY2    ' , 'Diatoms Concentration                  ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(12)  = 'ZOO2    ' , 'Mesozooplankton Concentration          ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(13)  = 'BSi     ' , 'Diatoms Silicate Concentration         ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(14)  = 'Fer     ' , 'Dissolved Iron Concentration           ',  'mol-C/L' ,  .true.     ,  .true.
+   sn_tracer(15)  = 'BFe     ' , 'Big iron particles Concentration       ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(16)  = 'GOC     ' , 'Big organic carbon Concentration       ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(17)  = 'SFe     ' , 'Small iron particles Concentration     ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(18)  = 'DFe     ' , 'Diatoms iron  Concentration            ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(19)  = 'DSi     ' , 'Sinking biogenic Silicate Concentration',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(20)  = 'NFe     ' , 'Nano iron Concentration                ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(21)  = 'NCHL    ' , 'Nano chlorophyl Concentration          ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(22)  = 'DCHL    ' , 'Diatoms chlorophyl Concentration       ',  'mol-C/L' ,  .true.    ,  .true.
+   sn_tracer(23)  = 'NO3     ' , 'Nitrates Concentration                 ',  'mol-C/L' ,  .true.     ,  .true.
+   sn_tracer(24)  = 'NH4     ' , 'Ammonium Concentration                 ',  'mol-C/L' ,  .true.    ,  .true.
+/
+!-----------------------------------------------------------------------
+&namtrc_dta      !    Initialisation from data input file
+!-----------------------------------------------------------------------
+!
+!                !  file name               ! frequency (hours) ! variable   ! time interp. !  clim  ! 'yearly'/ ! weights  ! rotation !
+!                !                          !  (if <0  months)  !   name     !   (logical)  !  (T/F) ! 'monthly' ! filename ! pairing  !
+   sn_trcdta(1)  = 'ORCA2_L75_ptrcT1'        ,        -1        ,  'DIC'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(2)  = 'ORCA2_L75_ptrcT1'        ,        -1        ,  'Alkalini' ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(3)  = 'ORCA2_L75_ptrcT1'  	 ,        -1        ,  'O2',          .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(4)  = 'ORCA2_L75_ptrcT1'        ,        -1        ,  'CaCO3'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(5)  = 'ORCA2_L75_ptrcT1'        ,        -1        ,  'PO4'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(6)  = 'ORCA2_L75_ptrcT1'  	 ,        -1        ,  'POC',    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(7)  = 'ORCA2_L75_ptrcT1'        ,        -1        ,  'Si'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(8)  = 'ORCA2_L75_ptrcT1'        ,        -1        ,  'PHY'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(9)  = 'ORCA2_L75_ptrcT1'  	 ,        -1        ,  'ZOO',    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(10)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'DOC'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(11)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'PHY2'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(12)  = 'ORCA2_L75_ptrcT1'  	 ,        -1        ,  'ZOO2',    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(13)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'BSi'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(14)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'Fer'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(15)  = 'ORCA2_L75_ptrcT1'  	 ,        -1        ,  'BFe',    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(16)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'GOC'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(17)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'SFe'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(18)  = 'ORCA2_L75_ptrcT1'  	 ,        -1        ,  'DFe',    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(19)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'DSi'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(20)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'NFe'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(21)  = 'ORCA2_L75_ptrcT1'  	 ,        -1        ,  'NCHL',    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(22)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'DCHL'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(23)  = 'ORCA2_L75_ptrcT1'        ,       -1        ,  'NO3'     ,    .false.   , .true. , 'yearly'  , ''       , ''
+   sn_trcdta(24)  = 'ORCA2_L75_ptrcT1'  	 ,        -1        ,  'NH4',    .false.   , .true. , 'yearly'  , ''       , ''
+
+!
+   cn_dir        =  './'      !  root directory for the location of the data files
+   rn_trfac(1)   =   1.0  !  multiplicative factor
+   rn_trfac(2)   =   1.0  !  -      -      -     -
+   rn_trfac(3)   =   1.0  !  -      -      -     -
+   rn_trfac(4)   =   1.0  !  -      -      -     -
+   rn_trfac(5)   =   1.0  !  -      -      -     -
+   rn_trfac(6)   =   1.0  !  -      -      -     -
+   rn_trfac(7)   =   1.0  !  -      -      -     -
+   rn_trfac(8)   =   1.0  !  -      -      -     -
+   rn_trfac(9)   =   1.0  !  -      -      -     -
+   rn_trfac(10)   =   1.0  !  -      -      -     -
+   rn_trfac(11)   =   1.0  !  -      -      -     -
+   rn_trfac(12)   =   1.0  !  -      -      -     -
+   rn_trfac(13)   =   1.0  !  -      -      -     -
+   rn_trfac(14)   =   1.0  !  -      -      -     -
+   rn_trfac(15)   =   1.0  !  -      -      -     -
+   rn_trfac(16)   =   1.0  !  -      -      -     -
+   rn_trfac(17)   =   1.0  !  -      -      -     -
+   rn_trfac(18)   =   1.0  !  -      -      -     -
+   rn_trfac(19)   =   1.0  !  -      -      -     -
+   rn_trfac(20)   =   1.0  !  -      -      -     -
+   rn_trfac(21)   =   1.0  !  -      -      -     -
+   rn_trfac(22)   =   1.0  !  -      -      -     -
+   rn_trfac(23)   =   1.0  !  -      -      -     -
+   rn_trfac(24)   =   1.0  !  -      -      -     -
+/
+!-----------------------------------------------------------------------
+&namtrc_adv    !   advection scheme for passive tracer 
+!-----------------------------------------------------------------------
+   ln_trcadv_cen2   =  .false.  !  2nd order centered scheme   
+   ln_trcadv_tvd    =  .false.  !  TVD scheme
+   ln_trcadv_muscl  =  .true.   !  MUSCL scheme
+   ln_trcadv_muscl2 =  .false.  !  MUSCL2 scheme + cen2 at boundaries
+   ln_trcadv_ubs    =  .false.  !  UBS scheme
+   ln_trcadv_qck    =  .false.  !  QUICKEST scheme
+/
+!-----------------------------------------------------------------------
+&namtrc_ldf    !   lateral diffusion scheme for passive tracer 
+!-----------------------------------------------------------------------
+   ln_trcldf_diff   =  .true.   !  performs lateral diffusion (T) or not (F)
+!                               !  Type of the operator : 
+   ln_trcldf_lap    =  .true.   !     laplacian operator       
+   ln_trcldf_bilap  =  .false.  !     bilaplacian operator     
+                                !  Direction of action  :
+   ln_trcldf_level  =  .false.  !     iso-level                
+   ln_trcldf_hor    =  .false.  !     horizontal (geopotential)         (require "key_ldfslp" when ln_sco=T)
+   ln_trcldf_iso    =  .true.   !     iso-neutral                       (require "key_ldfslp")
+!                               !  Coefficient
+   rn_ahtrc_0       =  2000.    !  horizontal eddy diffusivity for tracers [m2/s]
+   rn_ahtrb_0       =     0.    !     background eddy diffusivity for ldf_iso [m2/s]
+/
+!-----------------------------------------------------------------------
+&namtrc_zdf        !   vertical physics
+!-----------------------------------------------------------------------
+   ln_trczdf_exp   =  .false.  !  split explicit (T) or implicit (F) time stepping
+   nn_trczdf_exp   =   3       !  number of sub-timestep for ln_trczdfexp=T
+/
+!-----------------------------------------------------------------------
+&namtrc_rad        !  treatment of negative concentrations 
+!-----------------------------------------------------------------------
+   ln_trcrad   =  .true.  !  artificially correct negative concentrations (T) or not (F)
+/
+!-----------------------------------------------------------------------
+&namtrc_dmp    !   passive tracer newtonian damping   
+!-----------------------------------------------------------------------
+   ln_trcdmp   =  .false.  !  add a damping termn (T) or not (F)
+   nn_hdmp_tr  =   -1      !  horizontal shape =-1, damping in Med and Red Seas only
+                           !                   =XX, damping poleward of XX degrees (XX>0)
+                           !                      + F(distance-to-coast) + Red and Med Seas
+   nn_zdmp_tr  =    1      !  vertical   shape =0    damping throughout the water column
+                           !                   =1 no damping in the mixing layer (kz  criteria)
+                           !                   =2 no damping in the mixed  layer (rho crieria)
+   rn_surf_tr  =   50.     !  surface time scale of damping   [days]
+   rn_bot_tr   =  360.     !  bottom  time scale of damping   [days]
+   rn_dep_tr   =  800.     !  depth of transition between rn_surf and rn_bot [meters]
+   nn_file_tr  =    0      !  create a damping.coeff NetCDF file (=1) or not (=0)
+/
+!-----------------------------------------------------------------------
+&namtrc_trd       !   diagnostics on tracer trends        ('key_trdtrc')
+!                          or mixed-layer trends          ('key_trdmld_trc')
+!----------------------------------------------------------------------
+   nn_trd_trc  =  1460  !  time step frequency and tracers trends
+   nn_ctls_trc =   0        !  control surface type in mixed-layer trends (0,1 or n<jpk)
+   rn_ucf_trc  =   1        !  unit conversion factor (=1 -> /seconds ; =86400. -> /day)
+   ln_trdmld_trc_restart = .false.  !  restart for ML diagnostics
+   ln_trdmld_trc_instant = .true.  !  flag to diagnose trends of instantantaneous or mean ML T/S
+   ln_trdtrc(14)  =   .true.	! Fe 3D trends
+
+/
+!-----------------------------------------------------------------------
+&namtrc_dia       !   parameters for passive tracer additional diagnostics
+!----------------------------------------------------------------------
+   ln_diatrc     =  .true.   !  save additional diag. (T) or not (F)
+   nn_writedia   =  1460     !  time step frequency for diagnostics
+/
