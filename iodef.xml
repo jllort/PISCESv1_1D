@@ -1,0 +1,303 @@
+<?xml version="1.0"?>
+<simulation> 
+  
+  <context id="nemo">
+
+    <!-- $id$ -->
+ 
+    <!-- 
+============================================================================================================
+=                                  definition of all existing variables                                    =
+=                                            DO NOT CHANGE                                                 =
+============================================================================================================
+    -->
+
+  <field_definition level="1" prec="4" operation="ave(X)" enabled=".TRUE."> <!-- time step automaticaly defined -->
+ 
+     <group id="grid_T" axis_ref="none" grid_ref="grid_T">
+        <field id="toce"         description="temperature"                               unit="degC" axis_ref="deptht"   />
+        <field id="soce"         description="salinity"                                  unit="psu"  axis_ref="deptht"   />
+        <field id="somxl010"     description="Mixed Layer Depth 0.01 ref.10m"            unit="m"                        />
+	<field id="soshfldo"     description="Shortwave Radiation"                       unit="W/m2"                     />
+     </group>
+
+     <group id="grid_W" axis_ref="depthw" grid_ref="grid_W">
+        <field id="votkeavt"         description="Vertical Eddy Diffusivity"                               unit="m2/s"   />
+      </group>
+ 
+     <!-- ptrc on T grid -->
+ 
+     <group id="ptrc_T" axis_ref="deptht" grid_ref="grid_T">
+       <field id="DIC"      description="Dissolved inorganic Concentration"        unit="molC/L" />
+       <field id="Alkalini" description="Total Alkalinity Concentration"           unit="eq/L"    />
+       <field id="O2"       description="Oxygen Concentration"                     unit="molO2/L" />
+       <field id="CaCO3"    description="Calcite Concentration"                    unit="molC/L" />
+       <field id="PO4"      description="Phosphate Concentration"                  unit="molC/L" />
+       <field id="POC"      description="Small organic carbon Concentration"       unit="molC/L" />
+       <field id="Si"       description="Silicate Concentration"                   unit="molSi/L" />
+       <field id="PHY"      description="Nanophytoplankton Concentration"          unit="molC/L" />
+       <field id="ZOO"      description="Microzooplankton Concentration"           unit="molC/L" />
+       <field id="DOC"      description="Dissolved organic Concentration"          unit="molC/L" />
+       <field id="PHY2"     description="Diatoms Concentration"                    unit="molC/L" />
+       <field id="ZOO2"     description="Mesozooplankton Concentration"            unit="molC/L" />
+       <field id="BSi"      description="Diatoms Silicate Concentration"           unit="molC/L" />
+       <field id="Fer"      description="Dissolved Iron Concentration"             unit="molFe/L" />
+       <field id="BFe"      description="Big iron particles Concentration"         unit="molFe/L" />
+       <field id="GOC"      description="Big organic carbon Concentration"         unit="molC/L" />
+       <field id="SFe"      description="Small iron particles Concentration"       unit="molFe/L" />
+       <field id="DFe"      description="Diatoms iron  Concentration"              unit="molFe/L" />
+       <field id="DSi"      description="Sinking biogenic Silicate Concentration"  unit="molC/L" />
+       <field id="NFe"      description="Nano iron Concentration"                  unit="molC/L" />
+       <field id="NCHL"     description="Nano chlorophyl Concentration"            unit="gChl/L" />
+       <field id="DCHL"     description="Diatoms chlorophyl Concentration"         unit="gChl/L" />
+       <field id="NO3"      description="Nitrates Concentration"                   unit="molC/L" />
+       <field id="NH4"      description="Ammonium Concentration"                   unit="molC/L" />
+     </group>
+
+      <!-- diad on T grid : variables available with key_diatrc -->
+
+     <group id="diad_T" axis_ref="none" grid_ref="grid_T">
+       <field id="PH"          description="PH"                                       unit="-"           axis_ref="deptht" />
+       <field id="CO3"         description="Bicarbonates"                             unit="mol/L"       axis_ref="deptht" />
+       <field id="CO3sat"      description="CO3 saturation"                           unit="mol/L"       axis_ref="deptht" />
+       <field id="PAR"         description="Photosynthetically Available Radiation"   unit="W/m2"        axis_ref="deptht" />
+       <field id="PARmld"      description="PAR averaged in the ML"   		      unit="W/m2"        axis_ref="deptht" />
+       <field id="PPPHY"       description="Primary production of nanophyto"          unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="PPPHY2"      description="Primary production of diatoms"            unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="PPNEWN"      description="New Primary production of nanophyto"      unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="PPNEWD"      description="New Primary production of diatoms"        unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="PBSi"        description="Primary production of Si diatoms"         unit="molSi/m3/s"  axis_ref="deptht" />
+       <field id="PFeN"        description="Primary production of nano iron"          unit="molFe/m3/s"  axis_ref="deptht" />
+       <field id="PFeD"        description="Primary production of diatoms iron"       unit="molFe/m3/s"  axis_ref="deptht" />
+       <field id="PCAL"        description="Calcite production"                       unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="DCAL"        description="Calcite dissolution"                      unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="GRAZ"        description="Grazing by zooplankton"                   unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="Mumax"        description="Maximum growth rate"                   unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="MuN"        description="Growth rate Nano"                   unit="1/s"   axis_ref="deptht" />
+       <field id="MuD"        description="Growth rate Dia"                   unit="1/s"   axis_ref="deptht" />
+       <field id="LNnut"        description="Nutrient limitation Nano"                   unit="-"   axis_ref="deptht" />
+       <field id="LDnut"        description="Nutrient Limitation Dia"                   unit="-"   axis_ref="deptht" />
+       <field id="LNFe"        description="Iron limitation Nano"                   unit="-"   axis_ref="deptht" />
+       <field id="LDFe"        description="Iron limiation Dia"                   unit="-"   axis_ref="deptht" />
+       <field id="LNlight"        description="Light limitation Nano"                   unit="-"   axis_ref="deptht" />
+       <field id="LDlight"        description="Light limitation Diatom"                   unit="-"   axis_ref="deptht" />
+       <field id="GRAZD"        description="Total Grazing Loss of Diatoms"   unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="GRAZN"        description="Total Grazing Loss of Nano"   unit="molC/m3/s"   axis_ref="deptht" />
+       <field id="Nfix"        description="Nitrogen fixation at surface"             unit="molN/m2/s"      />
+       <field id="EPC100"      description="Export of carbon particles at 100 m"      unit="molC/m2/s"      />
+       <field id="EPFE100"     description="Export of biogenic iron at 100 m"         unit="molFe/m2/s"     />
+       <field id="EPSI100"     description="Export of Silicate at 100 m"              unit="molSi/m2/s"     />
+       <field id="EPCAL100"    description="Export of Calcite at 100 m"               unit="molC/m2/s"      />
+       <field id="Cflx"        description="DIC flux"                                 unit="molC/m2/s"      />
+       <field id="Oflx"        description="Oxygen flux"                              unit="molC/m2/s"      />
+       <field id="Kg"          description="Gas transfer"                             unit="molC/m2/s/uatm" />
+       <field id="Dpco2"       description="Delta CO2"                                unit="uatm"            />
+       <field id="Dpo2"        description="Delta O2"                                 unit="uatm"            />
+       <field id="Heup"        description="Euphotic layer depth"                     unit="m"               />
+       <field id="Irondep"     description="Iron deposition"                          unit="molFe/m2/s"     />
+       <field id="PCHLN"       description="Chl production of nanophyto"          unit="gCHL/m3/s"   axis_ref="deptht" />
+       <field id="PCHLD"       description="Chl production of diatoms"            unit="gCHL/m3/s"   axis_ref="deptht" />
+       <field id="GmxlN"       description="MLD > Heup penalisation for nano"            unit=""   axis_ref="deptht" />
+       <field id="GmxlD"       description="MLD > Heup penalisation for diatoms"         unit=""   axis_ref="deptht" />
+       <field id="GRAZNM"      description="Grazing of nano by mesozoo"            unit=""   axis_ref="deptht" />
+       <field id="GRAZDM"      description="Grazing of diatom by mesozoo"            unit=""   axis_ref="deptht" />
+       <field id="GRAZNZ"      description="Grazing of nano by microzoo"            unit=""   axis_ref="deptht" />
+       <field id="GRAZDZ"      description="Grazing of diatom by microzoo"            unit=""   axis_ref="deptht" />
+       <field id="mortN"      description="Mortality loss of nano"            unit=""   axis_ref="deptht" />
+       <field id="mortD"      description="Mortality loss of diatoms"            unit=""   axis_ref="deptht" />
+     </group>         
+
+     <group id="trdtrc" axis_ref="deptht" grid_ref="grid_T">
+       <field id="XAD_Fer"        description="Zonal advection Fe trends"           unit="molC/m3/s"    />
+       <field id="YAD_Fer"        description="Meridional advection Fe trends"      unit="molC/s"    />
+       <field id="ZAD_Fer"        description="Vertical advection Fe trends"        unit="molC/s"    />
+       <field id="LDF_Fer"        description="Lateral diffusion Fe trends"         unit="molC/s"   />
+       <field id="BBL_Fer"        description="Bottom boundary layer"		                    unit="molC/s"    />
+       <field id="ZDF_Fer"        description="Vertical diffusion Fe trends"        unit="molC/s"    />
+       <field id="DMP_Fer"        description="Internal damping"	                   	    unit="molC/s"    />
+       <field id="FOR_Fer"        description="Surface forcing" 		                    unit="molC/s"    />
+       <field id="SMS_Fer"        description="Source minus sink" 		                    unit="molC/s"    />
+       <field id="ATF_Fer"        description="Asselin time filter" 		                    unit="molC/s"    />
+       <field id="RDB_Fer"        description="Before RAD Fe trends" 		                    unit="molC/s"    />
+       <field id="RDN_Fer"        description="Now RAD Fe trends" 		                    unit="molC/s"    />
+       <field id="BACT_Fe"         description="Bacterial Fe eq. term" 		                    unit="molFe/m3/s"    />
+       <field id="POC_SFe"        description="Disaggregation Fe eq. term" 	                    unit="molFe/m3/s"    />
+       <field id="SCAV"           description="Scavenging Fe eq. term"  	                    unit="molFe/m3/s"   />
+       <field id="AGG_Fe"        description="Aggregation Fe eq. term" 	                            unit="molFe/m3/s"    />
+       <field id="COAG_Fe"        description="Coagulation Fe eq. term" 	                    unit="molFe/m3/s"    />
+       <field id="GRAFZ"        description="1st Fe eq. term. Microzoo"               unit="molFe/m3/s"    />
+       <field id="GRAFM"        description="2nd Fe eq. term. Mesozoo"                unit="molFe/m3/s"    />
+      </group>
+      <!-- scalar -->
+      
+      <group id="scalar" axis_ref="none" grid_ref="scalarpoint" zoom_ref="1point" >
+      </group>
+
+  </field_definition>
+
+    <!-- 
+============================================================================================================
+=                                           output files definition                                        =
+=                                            Define your own files                                         =
+=                                         put the variables you want...                                    =
+============================================================================================================
+    -->
+
+  <file_definition output_level="10" enabled=".TRUE.">
+   
+      <group id="5d" output_freq="432000"  output_level="10" enabled=".TRUE.">                      <!-- 5d files -->
+      </group>
+
+      <group id="1d" output_freq="86400"     output_level="10" enabled=".TRUE.">                      <!-- 1d files -->
+
+        <file id="1d_grid_T" name="auto" description="forcing from gridT" >
+	  <field ref="toce"     />
+	  <field ref="soce"     />
+	  <field ref="somxl010"    />
+	  <field ref="soshfldo"    />
+       </file>
+
+        <file id="1d_grid_W" name="auto" description="forcing from gridW" >
+	  <field ref="votkeavt"    />
+       </file>
+
+        <file id="1d_ptrc_T" name="auto" description="pisces sms variables" >
+	  <field ref="DIC"      />
+          <field ref="Alkalini" />
+          <field ref="O2"       />
+          <field ref="CaCO3"    />
+          <field ref="PO4"      />
+          <field ref="POC"      />
+          <field ref="Si"       />
+          <field ref="PHY"      />
+          <field ref="ZOO"      />
+          <field ref="DOC"      />
+          <field ref="PHY2"     />
+          <field ref="ZOO2"     />
+          <field ref="BSi"      />
+          <field ref="Fer"      />
+          <field ref="BFe"      />
+          <field ref="GOC"      />
+          <field ref="SFe"      />
+          <field ref="DFe"      />
+          <field ref="DSi"      />
+          <field ref="NFe"      />
+          <field ref="NCHL"     />
+          <field ref="DCHL"     />
+          <field ref="NO3"      />
+          <field ref="NH4"      />
+       </file>
+
+         <file id="1d_diad_T" name="auto" description="additional pisces diagnostics" >
+          <field ref="PH"       />
+          <field ref="CO3"      />
+          <field ref="CO3sat"   />
+          <field ref="PAR"      />
+          <field ref="PARmld"   />
+	  <field ref="PPPHY"    />
+          <field ref="PPPHY2"   />
+          <field ref="PPNEWN"   />
+          <field ref="PPNEWD"   />
+          <field ref="PBSi"     />
+          <field ref="PFeN"     />
+          <field ref="PFeD"     />
+          <field ref="PCAL"     />
+          <field ref="DCAL"     />
+          <field ref="GRAZ"     />
+          <field ref="EPC100"   />
+          <field ref="EPFE100"  />
+          <field ref="EPSI100"  />
+          <field ref="EPCAL100" />
+          <field ref="Cflx"     />
+          <field ref="Oflx"     />
+          <field ref="Kg"       />
+          <field ref="Dpco2"    />
+          <field ref="Dpo2"     />
+          <field ref="Heup"     />
+          <field ref="Irondep"  />
+          <field ref="Nfix"     />
+          <field ref="Mumax"    />
+          <field ref="MuN"      />
+          <field ref="MuD"      />
+          <field ref="LNnut"    />
+          <field ref="LDnut"    />
+          <field ref="LNFe"     />
+          <field ref="LDFe"     />
+          <field ref="LNlight"  />
+          <field ref="LDlight"  />
+          <field ref="GRAZD"    />
+          <field ref="GRAZN"    />
+          <field ref="PCHLD"    />
+          <field ref="PCHLN"    />
+          <field ref="GmxlD"    />
+          <field ref="GmxlN"    />
+       	  <field ref="GRAZNM"   />
+       	  <field ref="GRAZDM"   />
+       	  <field ref="GRAZNZ"   />
+       	  <field ref="GRAZDZ"   />
+       	  <field ref="mortN"   />
+       	  <field ref="mortD"   />
+       </file>
+
+       <file id="1d_trdtrc" name="auto" description="3D iron trends">
+          <field ref="ZDF_Fer" />
+       </file>
+      </group>
+
+      <group id="1m" output_freq="-1"     output_level="10" enabled=".TRUE.">                      <!-- real monthly files -->
+      </group>
+
+      <group id="2m" output_freq="-2"     output_level="10" enabled=".TRUE.">                      <!-- real 2m files -->
+      </group>
+
+      <group id="3m" output_freq="-3"     output_level="10" enabled=".TRUE.">                      <!-- real 3m files -->
+      </group>
+
+      <group id="4m" output_freq="-4"     output_level="10" enabled=".TRUE.">                      <!-- real 4m files -->
+      </group>
+
+      <group id="6m" output_freq="-6"     output_level="10" enabled=".TRUE.">                      <!-- real 6m files -->
+      </group>
+
+      <group id="1y" output_freq="-12"    output_level="10" enabled=".TRUE.">                      <!-- real yearly files -->
+     </group>
+
+      <group id="2y"  output_freq="-24"   output_level="10" enabled=".TRUE.">                      <!-- real 2y files -->
+      </group>
+
+      <group id="5y"  output_freq="-60"   output_level="10" enabled=".TRUE.">                      <!-- real 5y files -->
+      </group>
+
+      <group id="10y" output_freq="-120"  output_level="10" enabled=".TRUE.">                      <!-- real 10y files -->
+      </group>
+    
+  </file_definition>
+
+    <!-- 
+============================================================================================================
+=                                           grid definition                                                =
+=                                            DO NOT CHANGE                                                 =
+============================================================================================================
+    -->
+
+  <axis_definition>  
+     <axis id="deptht" description="Vertical T levels" unit="m" positive=".false." />
+     <axis id="depthu" description="Vertical U levels" unit="m" positive=".false." />
+     <axis id="depthv" description="Vertical V levels" unit="m" positive=".false." />
+     <axis id="depthw" description="Vertical W levels" unit="m" positive=".false." />
+     <axis id="none" description="axe non defini" unit="none" size="1" />
+  </axis_definition> 
+
+  <grid_definition>
+    <grid id="grid_T" description="grid T" />
+    <grid id="grid_U" description="grid U" />
+    <grid id="grid_V" description="grid V" />
+    <grid id="grid_W" description="grid W" />
+    <grid id="scalarpoint" description="scalar" >
+      <zoom id="1point" ibegin="1" jbegin="1" ni="1" nj="1" />
+    </grid>
+  </grid_definition>
+
+</context>
+
+</simulation>
